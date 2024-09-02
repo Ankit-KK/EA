@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 import joblib
 import tensorflow as tf
-import numpy as np
 
 # Load the pre-trained encoder and scaler
 encoder = joblib.load('onehot_encoder.pkl')
-scaler = joblib.load('minmax_scaler.pkl')  # Assuming you've saved your scaler similarly
+scaler = joblib.load('minmax_scaler.pkl')
 
 # Load the trained model
 model = tf.keras.models.load_model('my_model.keras')
@@ -18,44 +17,46 @@ st.title("Employee Attrition Prediction")
 input_method = st.radio("Choose input method", ["Single Person", "CSV File"])
 
 if input_method == "Single Person":
-    st.write("Enter the details for a single person:")
+    st.subheader("Enter the details for a single person:")
 
     # Organizing inputs into columns for better layout
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        age = st.slider('Age', min_value=18, max_value=100, help="Enter the age of the employee.")
-        daily_rate = st.slider('Daily Rate', min_value=1, max_value=1500, help="Enter the daily rate of the employee.")
-        distance_from_home = st.slider('Distance From Home (miles)', min_value=0, max_value=50, help="Enter the distance from home.")
+        age = st.number_input('Age', min_value=18, max_value=100, help="Enter the age of the employee.")
+        daily_rate = st.number_input('Daily Rate', min_value=1, help="Enter the daily rate of the employee.")
+        distance_from_home = st.number_input('Distance From Home (miles)', min_value=0, help="Enter the distance from home.")
         education = st.selectbox('Education Level', options=[1, 2, 3, 4, 5], help="1-Below College, 2-College, 3-Bachelor, 4-Master, 5-Doctor")
 
     with col2:
-        environment_satisfaction = st.slider('Environment Satisfaction', min_value=1, max_value=4, help="Rate the environment satisfaction level.")
-        hourly_rate = st.slider('Hourly Rate', min_value=1, max_value=100, help="Enter the hourly rate of the employee.")
-        job_involvement = st.slider('Job Involvement', min_value=1, max_value=4, help="Rate the job involvement level.")
-        job_level = st.slider('Job Level', min_value=1, max_value=5, help="Enter the job level of the employee.")
+        environment_satisfaction = st.selectbox('Environment Satisfaction', options=[1, 2, 3, 4], help="Rate the environment satisfaction level.")
+        hourly_rate = st.number_input('Hourly Rate', min_value=1, help="Enter the hourly rate of the employee.")
+        job_involvement = st.selectbox('Job Involvement', options=[1, 2, 3, 4], help="Rate the job involvement level.")
+        job_level = st.selectbox('Job Level', options=[1, 2, 3, 4, 5], help="Enter the job level of the employee.")
 
     with col3:
-        job_satisfaction = st.slider('Job Satisfaction', min_value=1, max_value=4, help="Rate the job satisfaction level.")
-        monthly_income = st.slider('Monthly Income', min_value=1000, max_value=20000, help="Enter the monthly income of the employee.")
-        num_companies_worked = st.slider('Number of Companies Worked', min_value=0, max_value=10, help="Enter the number of companies the employee has worked for.")
-        over_time = st.selectbox('Over Time', options=['Yes', 'No'], help="Does the employee work overtime?")
+        job_satisfaction = st.selectbox('Job Satisfaction', options=[1, 2, 3, 4], help="Rate the job satisfaction level.")
+        monthly_income = st.number_input('Monthly Income', min_value=1000, help="Enter the monthly income of the employee.")
+        num_companies_worked = st.number_input('Number of Companies Worked', min_value=0, help="Enter the number of companies the employee has worked for.")
+        over_time = st.radio('Over Time', options=['Yes', 'No'], help="Does the employee work overtime?")
 
+    st.subheader("Additional Details")
     col4, col5 = st.columns(2)
+    
     with col4:
-        percent_salary_hike = st.slider('Percent Salary Hike', min_value=0, max_value=30, help="Enter the percentage of salary hike.")
-        performance_rating = st.slider('Performance Rating', min_value=1, max_value=4, help="Rate the performance of the employee.")
-        relationship_satisfaction = st.slider('Relationship Satisfaction', min_value=1, max_value=4, help="Rate the relationship satisfaction.")
-        stock_option_level = st.slider('Stock Option Level', min_value=0, max_value=3, help="Enter the stock option level of the employee.")
+        percent_salary_hike = st.number_input('Percent Salary Hike', min_value=0, help="Enter the percentage of salary hike.")
+        performance_rating = st.selectbox('Performance Rating', options=[1, 2, 3, 4], help="Rate the performance of the employee.")
+        relationship_satisfaction = st.selectbox('Relationship Satisfaction', options=[1, 2, 3, 4], help="Rate the relationship satisfaction.")
+        stock_option_level = st.number_input('Stock Option Level', min_value=0, max_value=3, help="Enter the stock option level of the employee.")
 
     with col5:
-        total_working_years = st.slider('Total Working Years', min_value=0, max_value=40, help="Enter the total number of working years.")
-        training_times_last_year = st.slider('Training Times Last Year', min_value=0, max_value=10, help="Enter the number of training times last year.")
-        work_life_balance = st.slider('Work Life Balance', min_value=1, max_value=4, help="Rate the work-life balance.")
-        years_at_company = st.slider('Years at Company', min_value=0, max_value=40, help="Enter the number of years at the company.")
-        years_in_current_role = st.slider('Years in Current Role', min_value=0, max_value=20, help="Enter the number of years in the current role.")
-        years_since_last_promotion = st.slider('Years Since Last Promotion', min_value=0, max_value=15, help="Enter the number of years since last promotion.")
-        years_with_curr_manager = st.slider('Years With Current Manager', min_value=0, max_value=15, help="Enter the number of years with the current manager.")
+        total_working_years = st.number_input('Total Working Years', min_value=0, max_value=40, help="Enter the total number of working years.")
+        training_times_last_year = st.number_input('Training Times Last Year', min_value=0, max_value=10, help="Enter the number of training times last year.")
+        work_life_balance = st.selectbox('Work Life Balance', options=[1, 2, 3, 4], help="Rate the work-life balance.")
+        years_at_company = st.number_input('Years at Company', min_value=0, max_value=40, help="Enter the number of years at the company.")
+        years_in_current_role = st.number_input('Years in Current Role', min_value=0, max_value=20, help="Enter the number of years in the current role.")
+        years_since_last_promotion = st.number_input('Years Since Last Promotion', min_value=0, max_value=15, help="Enter the number of years since last promotion.")
+        years_with_curr_manager = st.number_input('Years With Current Manager', min_value=0, max_value=15, help="Enter the number of years with the current manager.")
 
     # Validation to ensure correct logical input
     if years_at_company > total_working_years:
@@ -110,7 +111,7 @@ if input_method == "Single Person":
         st.write(prediction)
 
 elif input_method == "CSV File":
-    st.write("Upload a CSV file to predict employee attrition.")
+    st.subheader("Upload a CSV file to predict employee attrition.")
 
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
