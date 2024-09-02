@@ -13,95 +13,92 @@ model = tf.keras.models.load_model('my_model.keras')
 # Set the title of the app
 st.title("Employee Attrition Prediction")
 
-# Columns in the CSV file
-csv_columns = [
-    'Age', 'BusinessTravel', 'DailyRate', 'Department', 'DistanceFromHome',
-    'Education', 'EducationField', 'EmployeeCount', 'EmployeeNumber',
-    'EnvironmentSatisfaction', 'Gender', 'HourlyRate', 'JobInvolvement',
-    'JobLevel', 'JobRole', 'JobSatisfaction', 'MaritalStatus',
-    'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'Over18',
-    'OverTime', 'PercentSalaryHike', 'PerformanceRating',
-    'RelationshipSatisfaction', 'StandardHours', 'StockOptionLevel',
-    'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
-    'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
-    'YearsWithCurrManager'
-]
-
 # Columns to be dropped
 columns_to_drop = ['EmployeeCount', 'EmployeeNumber', 'StandardHours', 'Over18']
-
-# Filter columns to use in the interface
-use_columns = [col for col in csv_columns if col not in columns_to_drop]
 
 # Option to choose input method
 input_method = st.radio("Choose input method", ["Single Person", "CSV File"])
 
-# Set options based on the CSV columns
-business_travel_options = ['Travel_Rarely', 'Travel_Frequently', 'Non-Travel']
-department_options = ['Sales', 'Research & Development', 'Human Resources']
-education_field_options = ['Life Sciences', 'Other', 'Medical', 'Marketing', 'Technical Degree', 'Human Resources']
-gender_options = ['Male', 'Female']
-job_role_options = ['Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 
-                   'Healthcare Representative', 'Manager', 'Sales Representative', 'Research Director', 'Human Resources']
-marital_status_options = ['Single', 'Married', 'Divorced']
-overtime_options = ['Yes', 'No']
-
 if input_method == "Single Person":
     st.subheader("Enter the details for a single person:")
 
-    # Creating input fields dynamically based on the columns that are used
-    input_data = {}
-    
-    for col in use_columns:
-        if col in ['Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'JobLevel', 'MonthlyIncome', 'MonthlyRate', 
-                   'NumCompaniesWorked', 'PercentSalaryHike', 'StockOptionLevel', 'TotalWorkingYears', 
-                   'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 
-                   'YearsWithCurrManager']:
-            input_data[col] = st.number_input(col, min_value=0)
-        elif col == 'BusinessTravel':
-            input_data[col] = st.selectbox(col, options=business_travel_options)
-        elif col == 'Department':
-            input_data[col] = st.selectbox(col, options=department_options)
-        elif col == 'Education':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4, 5])
-        elif col == 'EducationField':
-            input_data[col] = st.selectbox(col, options=education_field_options)
-        elif col == 'EnvironmentSatisfaction':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
-        elif col == 'Gender':
-            input_data[col] = st.selectbox(col, options=gender_options)
-        elif col == 'JobInvolvement':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
-        elif col == 'JobRole':
-            input_data[col] = st.selectbox(col, options=job_role_options)
-        elif col == 'JobSatisfaction':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
-        elif col == 'MaritalStatus':
-            input_data[col] = st.selectbox(col, options=marital_status_options)
-        elif col == 'OverTime':
-            input_data[col] = st.selectbox(col, options=overtime_options)
-        elif col == 'PerformanceRating':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
-        elif col == 'RelationshipSatisfaction':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
-        elif col == 'WorkLifeBalance':
-            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
+    # Input fields according to your specifications
+    age = st.slider('Age', min_value=18, max_value=100)
+    business_travel = st.selectbox('BusinessTravel', options=['Travel_Rarely', 'Travel_Frequently'])
+    daily_rate = st.number_input('DailyRate', min_value=1)
+    department = st.selectbox('Department', options=['Research & Development', 'Sales'])
+    distance_from_home = st.number_input('DistanceFromHome', min_value=1)
+    education = st.slider('Education', min_value=1, max_value=5)
+    education_field = st.selectbox('EducationField', options=['Life Sciences', 'Medical', 'Other'])
+    environment_satisfaction = st.slider('EnvironmentSatisfaction', min_value=1, max_value=4)
+    gender = st.selectbox('Gender', options=['Male', 'Female'])
+    hourly_rate = st.number_input('HourlyRate', min_value=1)
+    job_involvement = st.number_input('JobInvolvement', min_value=1)
+    job_level = st.number_input('JobLevel', min_value=1)
+    job_role = st.selectbox('JobRole', options=['Laboratory Technician', 'Research Scientist', 'Manufacturing Director', 'Sales Executive', 'Healthcare Representative'])
+    job_satisfaction = st.slider('JobSatisfaction', min_value=1, max_value=10)
+    marital_status = st.selectbox('MaritalStatus', options=['Single', 'Married', 'Divorced'])
+    monthly_income = st.number_input('MonthlyIncome', min_value=1)
+    monthly_rate = st.number_input('MonthlyRate', min_value=1)
+    num_companies_worked = st.number_input('NumCompaniesWorked', min_value=0)
+    over_time = st.selectbox('OverTime', options=['Yes', 'No'])
+    percent_salary_hike = st.number_input('PercentSalaryHike', min_value=0)
+    performance_rating = st.slider('PerformanceRating', min_value=1, max_value=10)
+    relationship_satisfaction = st.slider('RelationshipSatisfaction', min_value=1, max_value=10)
+    stock_option_level = st.slider('StockOptionLevel', min_value=0, max_value=10)
+    total_working_years = st.number_input('TotalWorkingYears', min_value=0)
+    training_times_last_year = st.number_input('TrainingTimesLastYear', min_value=0)
+    years_at_company = st.number_input('YearsAtCompany', min_value=0)
+    years_in_current_role = st.number_input('YearsInCurrentRole', min_value=0)
+    years_since_last_promotion = st.number_input('YearsSinceLastPromotion', min_value=0)
+    years_with_curr_manager = st.number_input('YearsWithCurrManager', min_value=0)
 
     # Preprocessing and prediction logic
     if st.button('Predict'):
         # Prepare the input data
-        input_df = pd.DataFrame([input_data])
+        input_data = pd.DataFrame({
+            'Age': [age],
+            'BusinessTravel': [business_travel],
+            'DailyRate': [daily_rate],
+            'Department': [department],
+            'DistanceFromHome': [distance_from_home],
+            'Education': [education],
+            'EducationField': [education_field],
+            'EnvironmentSatisfaction': [environment_satisfaction],
+            'Gender': [gender],
+            'HourlyRate': [hourly_rate],
+            'JobInvolvement': [job_involvement],
+            'JobLevel': [job_level],
+            'JobRole': [job_role],
+            'JobSatisfaction': [job_satisfaction],
+            'MaritalStatus': [marital_status],
+            'MonthlyIncome': [monthly_income],
+            'MonthlyRate': [monthly_rate],
+            'NumCompaniesWorked': [num_companies_worked],
+            'OverTime': [over_time],
+            'PercentSalaryHike': [percent_salary_hike],
+            'PerformanceRating': [performance_rating],
+            'RelationshipSatisfaction': [relationship_satisfaction],
+            'StockOptionLevel': [stock_option_level],
+            'TotalWorkingYears': [total_working_years],
+            'TrainingTimesLastYear': [training_times_last_year],
+            'WorkLifeBalance': [work_life_balance],
+            'YearsAtCompany': [years_at_company],
+            'YearsInCurrentRole': [years_in_current_role],
+            'YearsSinceLastPromotion': [years_since_last_promotion],
+            'YearsWithCurrManager': [years_with_curr_manager]
+        })
 
         # Pre-process the data
-        input_df['OverTime'] = input_df['OverTime'].apply(lambda x: 1 if x == "Yes" else 0)
+        input_data['OverTime'] = input_data['OverTime'].apply(lambda x: 1 if x == "Yes" else 0)
 
         # Encode categorical data
-        x_cat_input = input_df.select_dtypes(include=['object'])
+        x_cat_input = input_data.select_dtypes(include=['object'])
         x_cat_input = encoder.transform(x_cat_input).toarray()
         x_cat_input = pd.DataFrame(x_cat_input)
 
         # Combine the categorical and numerical features
-        x_num_input = input_df.select_dtypes(include=['float', 'int'])
+        x_num_input = input_data.select_dtypes(include=['float', 'int'])
         x_all_input = pd.concat([x_cat_input, x_num_input], axis=1)
         x_all_input.columns = x_all_input.columns.astype(str)
 
