@@ -116,7 +116,7 @@ elif input_method == "CSV File":
         st.write(new_data.head())  # Display the first few rows of the uploaded data
 
         # Pre-process the data
-        new_data = new_data.drop('Over18', axis=1, errors='ignore')
+        new_data = new_data.drop(['Over18'], axis=1, errors='ignore')
         new_data['OverTime'] = new_data['OverTime'].apply(lambda x: 1 if x == "Yes" else 0)
         new_data = new_data.drop(['EmployeeCount', 'EmployeeNumber', 'StandardHours'], axis=1, errors='ignore')
 
