@@ -13,57 +13,95 @@ model = tf.keras.models.load_model('my_model.keras')
 # Set the title of the app
 st.title("Employee Attrition Prediction")
 
+# Columns in the CSV file
+csv_columns = [
+    'Age', 'BusinessTravel', 'DailyRate', 'Department', 'DistanceFromHome',
+    'Education', 'EducationField', 'EmployeeCount', 'EmployeeNumber',
+    'EnvironmentSatisfaction', 'Gender', 'HourlyRate', 'JobInvolvement',
+    'JobLevel', 'JobRole', 'JobSatisfaction', 'MaritalStatus',
+    'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'Over18',
+    'OverTime', 'PercentSalaryHike', 'PerformanceRating',
+    'RelationshipSatisfaction', 'StandardHours', 'StockOptionLevel',
+    'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
+    'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
+    'YearsWithCurrManager'
+]
+
+# Columns to be dropped
+columns_to_drop = ['EmployeeCount', 'EmployeeNumber', 'StandardHours', 'Over18']
+
+# Filter columns to use in the interface
+use_columns = [col for col in csv_columns if col not in columns_to_drop]
+
 # Option to choose input method
 input_method = st.radio("Choose input method", ["Single Person", "CSV File"])
+
+# Set options based on the CSV columns
+business_travel_options = ['Travel_Rarely', 'Travel_Frequently', 'Non-Travel']
+department_options = ['Sales', 'Research & Development', 'Human Resources']
+education_field_options = ['Life Sciences', 'Other', 'Medical', 'Marketing', 'Technical Degree', 'Human Resources']
+gender_options = ['Male', 'Female']
+job_role_options = ['Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 
+                   'Healthcare Representative', 'Manager', 'Sales Representative', 'Research Director', 'Human Resources']
+marital_status_options = ['Single', 'Married', 'Divorced']
+overtime_options = ['Yes', 'No']
 
 if input_method == "Single Person":
     st.subheader("Enter the details for a single person:")
 
-    # Organizing inputs into columns for better layout
-    col1, col2, col3 = st.columns(3)
+    # Creating input fields dynamically based on the columns that are used
+    input_data = {}
+    
+    for col in use_columns:
+        if col in ['Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'JobLevel', 'MonthlyIncome', 'MonthlyRate', 
+                   'NumCompaniesWorked', 'PercentSalaryHike', 'StockOptionLevel', 'TotalWorkingYears', 
+                   'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 
+                   'YearsWithCurrManager']:
+            input_data[col] = st.number_input(col, min_value=0)
+        elif col == 'BusinessTravel':
+            input_data[col] = st.selectbox(col, options=business_travel_options)
+        elif col == 'Department':
+            input_data[col] = st.selectbox(col, options=department_options)
+        elif col == 'Education':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4, 5])
+        elif col == 'EducationField':
+            input_data[col] = st.selectbox(col, options=education_field_options)
+        elif col == 'EnvironmentSatisfaction':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
+        elif col == 'Gender':
+            input_data[col] = st.selectbox(col, options=gender_options)
+        elif col == 'JobInvolvement':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
+        elif col == 'JobRole':
+            input_data[col] = st.selectbox(col, options=job_role_options)
+        elif col == 'JobSatisfaction':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
+        elif col == 'MaritalStatus':
+            input_data[col] = st.selectbox(col, options=marital_status_options)
+        elif col == 'OverTime':
+            input_data[col] = st.selectbox(col, options=overtime_options)
+        elif col == 'PerformanceRating':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
+        elif col == 'RelationshipSatisfaction':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
+        elif col == 'WorkLifeBalance':
+            input_data[col] = st.selectbox(col, options=[1, 2, 3, 4])
 
-    with col1:
-        age = st.number_input('Age', min_value=18, max_value=100)
-        daily_rate = st.number_input('Daily Rate', min_value=1)
-        distance_from_home = st.number_input('Distance From Home', min_value=0)
-        education = st.selectbox('Education Level', options=[1, 2, 3, 4, 5])
-
-    with col2:
-        environment_satisfaction = st.selectbox('Environment Satisfaction', options=[1, 2, 3, 4])
-        job_involvement = st.selectbox('Job Involvement', options=[1, 2, 3, 4])
-        job_level = st.selectbox('Job Level', options=[1, 2, 3, 4, 5])
-
-    with col3:
-        job_satisfaction = st.selectbox('Job Satisfaction', options=[1, 2, 3, 4])
-        monthly_income = st.number_input('Monthly Income', min_value=1000)
-        over_time = st.radio('Over Time', options=['Yes', 'No'])
-
-    # Validation to ensure correct logical input
+    # Preprocessing and prediction logic
     if st.button('Predict'):
         # Prepare the input data
-        input_data = pd.DataFrame({
-            'Age': [age],
-            'DailyRate': [daily_rate],
-            'DistanceFromHome': [distance_from_home],
-            'Education': [education],
-            'EnvironmentSatisfaction': [environment_satisfaction],
-            'JobInvolvement': [job_involvement],
-            'JobLevel': [job_level],
-            'JobSatisfaction': [job_satisfaction],
-            'MonthlyIncome': [monthly_income],
-            'OverTime': [over_time]
-        })
+        input_df = pd.DataFrame([input_data])
 
         # Pre-process the data
-        input_data['OverTime'] = input_data['OverTime'].apply(lambda x: 1 if x == "Yes" else 0)
+        input_df['OverTime'] = input_df['OverTime'].apply(lambda x: 1 if x == "Yes" else 0)
 
         # Encode categorical data
-        x_cat_input = input_data.select_dtypes(include=['object'])
+        x_cat_input = input_df.select_dtypes(include=['object'])
         x_cat_input = encoder.transform(x_cat_input).toarray()
         x_cat_input = pd.DataFrame(x_cat_input)
 
         # Combine the categorical and numerical features
-        x_num_input = input_data.select_dtypes(include=['float', 'int'])
+        x_num_input = input_df.select_dtypes(include=['float', 'int'])
         x_all_input = pd.concat([x_cat_input, x_num_input], axis=1)
         x_all_input.columns = x_all_input.columns.astype(str)
 
@@ -87,7 +125,6 @@ elif input_method == "CSV File":
         new_data = pd.read_csv(uploaded_file)
         
         # Drop unnecessary columns if they exist
-        columns_to_drop = ['EmployeeCount', 'EmployeeNumber', 'StandardHours', 'Over18']
         new_data = new_data.drop(columns=columns_to_drop, axis=1, errors='ignore')
         
         st.write("Uploaded Data (first 5 rows):")
