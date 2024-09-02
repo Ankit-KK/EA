@@ -21,10 +21,10 @@ input_method = st.radio("Choose input method", ["Single Person", "CSV File"])
 
 if input_method == "Single Person":
     st.subheader("Enter the details for a single person:")
-    
+
     # Create a form for single person input
     with st.form(key='single_person_form'):
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         
         with col1:
             age = st.slider('Age', min_value=18, max_value=100)
@@ -36,6 +36,8 @@ if input_method == "Single Person":
             job_level = st.number_input('JobLevel', min_value=1)
             job_satisfaction = st.slider('JobSatisfaction', min_value=1, max_value=10)
             monthly_income = st.number_input('MonthlyIncome', min_value=1)
+        
+        with col2:
             monthly_rate = st.number_input('MonthlyRate', min_value=1)
             num_companies_worked = st.number_input('NumCompaniesWorked', min_value=0)
             percent_salary_hike = st.number_input('PercentSalaryHike', min_value=0)
@@ -46,7 +48,7 @@ if input_method == "Single Person":
             training_times_last_year = st.number_input('TrainingTimesLastYear', min_value=0)
             years_at_company = st.number_input('YearsAtCompany', min_value=0)
         
-        with col2:
+        with col3:
             business_travel = st.selectbox('BusinessTravel', options=['Travel_Rarely', 'Travel_Frequently'])
             department = st.selectbox('Department', options=['Research & Development', 'Sales'])
             education_field = st.selectbox('EducationField', options=['Life Sciences', 'Medical', 'Other'])
