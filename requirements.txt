@@ -1,3 +1,5 @@
-joblib
+streamlit
+pandas
 tensorflow
-sklearn
+scikit-learn
+joblib
