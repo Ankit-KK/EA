@@ -5,7 +5,7 @@ import tensorflow as tf
 
 # Load the pre-trained encoder and scaler
 encoder = joblib.load('onehot_encoder.pkl')
-scaler = joblib.load('scaler.pkl')  # Assuming you've saved your scaler similarly
+scaler = joblib.load('minmax_scaler.pkl')  # Assuming you've saved your scaler similarly
 
 # Load the trained model
 model = tf.keras.models.load_model('my_model.keras')
