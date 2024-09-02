@@ -36,6 +36,7 @@ if input_method == "Single Person":
             job_level = st.number_input('JobLevel', min_value=1)
             job_satisfaction = st.slider('JobSatisfaction', min_value=1, max_value=10)
             monthly_income = st.number_input('MonthlyIncome', min_value=1)
+            environment_satisfaction = st.slider('EnvironmentSatisfaction', min_value=1, max_value=4)
         
         with col2:
             monthly_rate = st.number_input('MonthlyRate', min_value=1)
